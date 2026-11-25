@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facturación | Kraft &amp; Co</title>
+<link rel="stylesheet" href="../../css/estilos.css">
+<style>
+.invoice-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.invoice-meta{display:grid;grid-template-columns:repeat(2,minmax(160px,1fr));gap:12px;max-width:520px;width:100%}
+.invoice-table input{min-width:75px;padding:8px}
+.invoice-table .product-name{min-width:180px}
+.invoice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.invoice-total{max-width:390px;margin:18px 0 0 auto}
+.total-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ddd}
+.total-row.grand{font-size:1.2rem;font-weight:700;border-bottom:0;padding-top:14px}
+.invoice-note{font-size:.82rem;color:#666;margin-top:12px}
+@media print{
+ body{background:#fff!important}.sidebar,.topbar,.pie,.no-print{display:none!important}
+ .app-layout,.main-area{display:block!important}.page-content{padding:0!important;width:100%!important}
+ .bloque{border:0!important;padding:0!important;margin:12px 0!important}
+ input,select{border:0!important;padding:3px!important;appearance:none}
+ .invoice-table input{min-width:0}
+}
+</style>
+</head>
+<body>
+<div class="app-layout">
+<aside class="sidebar">
+<div class="brand"><h1>Kraft &amp; Co</h1><p>Sistema de gestión de papelería</p></div>
+<div class="nav-title">Menú principal</div>
+<nav class="nav-list">
+<a href="../../index.html"><span class="nav-icon">⌂</span><span>Inicio</span></a>
+<a href="../usuarios/index.html"><span class="nav-icon">♙</span><span>Usuarios</span></a>
+<a href="../productos/index.html"><span class="nav-icon">▣</span><span>Productos</span></a>
+<a href="../categorias/index.html"><span class="nav-icon">▤</span><span>Categorías</span></a>
+<a href="../inventario/index.html"><span class="nav-icon">▥</span><span>Inventario</span></a>
+<a href="index.html" class="active"><span class="nav-icon">▤</span><span>Facturación</span></a>
+<a href="../solicitudes/index.html"><span class="nav-icon">▧</span><span>Solicitudes</span></a>
+<a href="../estadisticas/index.html"><span class="nav-icon">▨</span><span>Estadísticas</span></a>
+<a href="../historial/index.html"><span class="nav-icon">◷</span><span>Historial</span></a>
+<a href="../configuracion/index.html"><span class="nav-icon">⚙</span><span>Configuración</span></a>
+</nav><div class="sidebar-foot">Panel administrativo<br>Versión de proyecto</div>
+</aside>
+<div class="main-area">
+<header class="topbar"><span class="crumb">Kraft &amp; Co / Facturación</span><span class="user">Administrador</span></header>
+<main class="page-content">
+<section class="intro"><h2>Crear factura</h2><p>Registra los datos del cliente y los productos de su compra.</p></section>
+<section class="bloque">
+<div class="invoice-head">
+<div><h2>Kraft &amp; Co</h2><p class="descripcion">Factura de venta</p><p id="invoiceNumber" class="ayuda"></p></div>
+<div class="invoice-meta">
+<div class="campo"><label for="fecha">Fecha</label><input type="date" id="fecha"></div>
+<div class="campo"><label for="numero">Número de factura</label><input id="numero" value="FAC-0001"></div>
+<div class="campo"><label for="cliente">Nombre del cliente</label><input id="cliente" placeholder="Nombre completo"></div>
+<div class="campo"><label for="documento">Documento / NIT</label><input id="documento" placeholder="Número de documento"></div>
+</div>
+</div>
+</section>
+<section class="bloque">
+<div class="invoice-head"><div><h2>Productos facturados</h2><p class="descripcion">Agrega una fila por cada producto de la compra.</p></div><button class="no-print" type="button" onclick="agregarFila()">+ Agregar producto</button></div>
+<div class="tabla-contenedor">
+<table class="invoice-table">
+<thead><tr><th>Producto / descripción</th><th>Cantidad</th><th>Precio unitario</th><th>Importe</th><th class="no-print">Acción</th></tr></thead>
+<tbody id="items">
+<tr>
+<td><input class="product-name" aria-label="Producto" placeholder="Nombre del producto" oninput="calcular()"></td>
+<td><input type="number" min="1" step="1" value="1" aria-label="Cantidad" oninput="calcular()"></td>
+<td><input type="number" min="0" step="1" value="0" aria-label="Precio unitario" oninput="calcular()"></td>
+<td class="importe">$0</td><td class="no-print"><button type="button" onclick="eliminarFila(this)">Quitar</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="invoice-total">
+<div class="total-row"><span>Subtotal</span><strong id="subtotal">$0</strong></div>
+<div class="total-row"><label for="iva">IVA (%)</label><input id="iva" type="number" min="0" max="100" value="19" style="max-width:90px;text-align:right" oninput="calcular()"></div>
+<div class="total-row"><span>Valor del IVA</span><strong id="valorIva">$0</strong></div>
+<div class="total-row grand"><span>Total a pagar</span><strong id="total">$0</strong></div>
+</div>
+<p class="invoice-note">El IVA inicia en 19 % como valor de referencia. Verifica la tarifa aplicable a cada producto antes de emitir la factura.</p>
+<div class="invoice-actions no-print">
+<button type="button" onclick="window.print()">Imprimir factura</button>
+<button type="button" onclick="limpiarFactura()">Nueva factura</button>
+</div>
+</section>
+</main>
+<footer class="pie">Kraft &amp; Co · Facturación</footer>
+</div></div>
+<script src="funciones.js"></script>
+</body></html>
