@@ -1,3 +1,208 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Control de inventario | Kraft &amp; Co</title><link rel="stylesheet" href="../../css/estilos.css"></head>
-<body><div class="app-layout"><aside class="sidebar"><div class="brand"><h1>Kraft &amp; Co</h1><p>Sistema de gestión de papelería</p></div><div class="nav-title">Menú principal</div><nav class="nav-list"><a href="../../index.html"><span class="nav-icon">⌂</span><span>Inicio</span></a><a href="../../modulos/usuarios/index.html"><span class="nav-icon">♙</span><span>Usuarios</span></a><a href="../../modulos/productos/index.html"><span class="nav-icon">▣</span><span>Productos</span></a><a href="../../modulos/categorias/index.html"><span class="nav-icon">▤</span><span>Categorías</span></a><a href="../../modulos/inventario/index.html" class="active"><span class="nav-icon">▥</span><span>Inventario</span></a>
-    <a href="../../modulos/facturacion/index.html"><span class="nav-icon">▤</span><span>Facturación</span></a><a href="../../modulos/solicitudes/index.html"><span class="nav-icon">▧</span><span>Solicitudes</span></a><a href="../../modulos/estadisticas/index.html"><span class="nav-icon">▨</span><span>Estadísticas</span></a><a href="../../modulos/historial/index.html"><span class="nav-icon">◷</span><span>Historial</span></a><a href="../../modulos/configuracion/index.html"><span class="nav-icon">⚙</span><span>Configuración</span></a></nav><div class="sidebar-foot">Panel administrativo<br>Versión de proyecto</div></aside><div class="main-area"><header class="topbar"><span class="crumb">Kraft &amp; Co / Inventario</span><span class="user">Administrador</span></header><main class="page-content"><section class="intro"><h2>Control de inventario</h2><p>Registro de entradas y salidas. Administra y consulta la información de este módulo.</p></section><section class="bloque"><h2>Registrar movimiento</h2><div class="formulario"><div class="campo"><label for="producto">Producto</label><input id="producto" placeholder="Nombre del producto"></div><div class="campo"><label for="tipo">Tipo de movimiento</label><select id="tipo"><option value="">Seleccionar tipo</option><option>Entrada</option><option>Salida</option></select></div><div class="campo"><label for="cantidad">Cantidad</label><input type="number" id="cantidad" placeholder="Cantidad"></div><div><button onclick="registrarMovimiento()">Registrar movimiento</button></div></div></section><section class="bloque"><h2>Movimientos registrados</h2><div class="tabla-contenedor"><table><thead><tr><th>Producto</th><th>Movimiento</th><th>Cantidad</th></tr></thead><tbody id="tablaInventario"></tbody></table></div></section></main><footer class="pie">Kraft &amp; Co · Panel de administración</footer></div></div><script src="funciones.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Kraft &amp; Co</title>
+    <link rel="stylesheet" href="../../css/estilos.css">
+    <style>
+        .inventory-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .summary-box {
+            background: white;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .summary-box p { color: #707070; font-size: .85rem; }
+        .summary-box strong { display: block; font-size: 1.6rem; margin-top: 5px; }
+        .product-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+        .product-form .full { grid-column: 1 / -1; }
+        .image-area {
+            border: 1px dashed #aaa;
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .image-preview {
+            width: 105px;
+            height: 105px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            object-fit: cover;
+            background: #f1f1f1;
+        }
+        .inventory-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .inventory-toolbar input { max-width: 340px; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .product-card img {
+            width: 100%;
+            height: 155px;
+            object-fit: cover;
+            background: #eee;
+            display: block;
+        }
+        .product-info { padding: 14px; }
+        .product-info h3 { margin-bottom: 5px; }
+        .product-category { color: #777; font-size: .82rem; }
+        .product-price { font-weight: bold; margin: 10px 0 5px; }
+        .stock-line { display: flex; justify-content: space-between; gap: 8px; font-size: .86rem; }
+        .stock-low { font-weight: bold; text-decoration: underline; }
+        .product-actions { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+        .product-actions button { padding: 7px 9px; font-size: .8rem; }
+        .empty-inventory {
+            padding: 35px 15px;
+            text-align: center;
+            border: 1px dashed #bbb;
+            border-radius: 8px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+        .help-text { color: #777; font-size: .8rem; margin-top: 7px; }
+        @media(max-width:650px) {
+            .inventory-summary { grid-template-columns: 1fr; }
+            .product-form { grid-template-columns: 1fr; }
+            .product-form .full { grid-column: auto; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>Kraft &amp; Co</h1>
+            <p>Sistema de gestión de papelería</p>
+        </div>
+        <div class="nav-title">Menú principal</div>
+        <nav class="nav-list">
+            <a href="../../index.html"><span class="nav-icon">⌂</span><span>Inicio</span></a>
+            <a href="../usuarios/index.html"><span class="nav-icon">♙</span><span>Usuarios</span></a>
+            <a href="../categorias/index.html"><span class="nav-icon">▤</span><span>Categorías</span></a>
+            <a href="index.html" class="active"><span class="nav-icon">▥</span><span>Inventario</span></a>
+            <a href="../facturacion/index.html"><span class="nav-icon">▤</span><span>Facturación</span></a>
+            <a href="../solicitudes/index.html"><span class="nav-icon">▧</span><span>Solicitudes</span></a>
+            <a href="../estadisticas/index.html"><span class="nav-icon">▨</span><span>Estadísticas</span></a>
+            <a href="../historial/index.html"><span class="nav-icon">◷</span><span>Historial</span></a>
+            <a href="../configuracion/index.html"><span class="nav-icon">⚙</span><span>Configuración</span></a>
+        </nav>
+        <div class="sidebar-foot">Panel administrativo<br>Versión de proyecto</div>
+    </aside>
+
+    <div class="main-area">
+        <header class="topbar">
+            <span class="crumb">Kraft &amp; Co / Inventario</span>
+            <span class="user">Administrador</span>
+        </header>
+
+        <main class="page-content">
+            <section class="intro">
+                <h2>Inventario de productos</h2>
+                <p>Registra productos con su fotografía y consulta las existencias de la papelería.</p>
+            </section>
+
+            <section class="inventory-summary">
+                <div class="summary-box">
+                    <p>Productos diferentes</p>
+                    <strong id="totalProductos">0</strong>
+                </div>
+                <div class="summary-box">
+                    <p>Unidades en inventario</p>
+                    <strong id="totalUnidades">0</strong>
+                </div>
+                <div class="summary-box">
+                    <p>Productos con pocas unidades</p>
+                    <strong id="productosBajos">0</strong>
+                </div>
+            </section>
+
+            <section class="bloque">
+                <h2>Agregar producto al inventario</h2>
+                <div class="product-form">
+                    <div class="campo">
+                        <label for="nombre">Nombre del producto</label>
+                        <input type="text" id="nombre" placeholder="Ej. Cuaderno cuadriculado">
+                    </div>
+                    <div class="campo">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria">
+                            <option value="">Seleccionar categoría</option>
+                            <option>Cuadernos</option>
+                            <option>Escritura</option>
+                            <option>Papelería</option>
+                            <option>Arte y manualidades</option>
+                            <option>Otros</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label for="precio">Precio de venta (COP)</label>
+                        <input type="number" id="precio" min="0" placeholder="Ej. 5000">
+                    </div>
+                    <div class="campo">
+                        <label for="cantidad">Cantidad inicial</label>
+                        <input type="number" id="cantidad" min="0" step="1" placeholder="Ej. 20">
+                    </div>
+                    <div class="campo full">
+                        <label for="descripcion">Descripción (opcional)</label>
+                        <input type="text" id="descripcion" placeholder="Información adicional del producto">
+                    </div>
+                    <div class="campo full">
+                        <label for="imagen">Imagen del producto</label>
+                        <div class="image-area">
+                            <img id="vistaPrevia" class="image-preview" alt="Vista previa del producto">
+                            <div>
+                                <input type="file" id="imagen" accept="image/*" onchange="mostrarImagen()">
+                                <p class="help-text">Selecciona una fotografía desde tu computador. Preferiblemente JPG o PNG.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full">
+                        <button type="button" onclick="agregarProducto()">Guardar producto</button>
+                        <button type="button" onclick="limpiarFormulario()">Limpiar</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bloque">
+                <h2>Productos disponibles</h2>
+                <p class="descripcion">Aquí puedes ver las imágenes, precios y cantidades de cada producto.</p>
+                <div class="inventory-toolbar">
+                    <input type="search" id="buscar" placeholder="Buscar producto..." oninput="mostrarProductos()">
+                    <span id="textoCantidad" class="help-text">0 productos</span>
+                </div>
+                <div id="listaProductos" class="product-grid"></div>
+            </section>
+        </main>
+        <footer class="pie">Kraft &amp; Co · Inventario</footer>
+    </div>
+</div>
+<script src="funciones.js"></script>
+</body>
+</html>

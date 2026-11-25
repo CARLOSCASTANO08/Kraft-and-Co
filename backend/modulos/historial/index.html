@@ -1,3 +1,185 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Historial de operaciones | Kraft &amp; Co</title><link rel="stylesheet" href="../../css/estilos.css"></head>
-<body><div class="app-layout"><aside class="sidebar"><div class="brand"><h1>Kraft &amp; Co</h1><p>Sistema de gestión de papelería</p></div><div class="nav-title">Menú principal</div><nav class="nav-list"><a href="../../index.html"><span class="nav-icon">⌂</span><span>Inicio</span></a><a href="../../modulos/usuarios/index.html"><span class="nav-icon">♙</span><span>Usuarios</span></a><a href="../../modulos/productos/index.html"><span class="nav-icon">▣</span><span>Productos</span></a><a href="../../modulos/categorias/index.html"><span class="nav-icon">▤</span><span>Categorías</span></a><a href="../../modulos/inventario/index.html"><span class="nav-icon">▥</span><span>Inventario</span></a>
-    <a href="../../modulos/facturacion/index.html"><span class="nav-icon">▤</span><span>Facturación</span></a><a href="../../modulos/solicitudes/index.html"><span class="nav-icon">▧</span><span>Solicitudes</span></a><a href="../../modulos/estadisticas/index.html"><span class="nav-icon">▨</span><span>Estadísticas</span></a><a href="../../modulos/historial/index.html" class="active"><span class="nav-icon">◷</span><span>Historial</span></a><a href="../../modulos/configuracion/index.html"><span class="nav-icon">⚙</span><span>Configuración</span></a></nav><div class="sidebar-foot">Panel administrativo<br>Versión de proyecto</div></aside><div class="main-area"><header class="topbar"><span class="crumb">Kraft &amp; Co / Historial</span><span class="user">Administrador</span></header><main class="page-content"><section class="intro"><h2>Historial de operaciones</h2><p>Registro de actividades administrativas. Administra y consulta la información de este módulo.</p></section><section class="bloque"><h2>Registrar operación</h2><div class="formulario"><div class="campo"><label for="usuario">Usuario</label><input id="usuario" placeholder="Usuario que realizó la operación"></div><div class="campo"><label for="operacion">Descripción</label><input id="operacion" placeholder="Descripción de la operación"></div><div><button onclick="registrarOperacion()">Registrar operación</button></div></div></section><section class="bloque"><h2>Historial de actividades</h2><div class="tabla-contenedor"><table><thead><tr><th>Usuario</th><th>Operación</th><th>Fecha</th></tr></thead><tbody id="tablaHistorial"></tbody></table></div></section></main><footer class="pie">Kraft &amp; Co · Panel de administración</footer></div></div><script src="funciones.js"></script></body></html>
+<!DOCTYPE html>
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Historial de operaciones | Kraft &amp; Co
+  </title>
+  <link href="../../css/estilos.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="app-layout">
+   <!-- Menú lateral: enlaces para cambiar de sección -->
+   <aside class="sidebar">
+    <div class="brand">
+     <h1>
+      Kraft &amp; Co
+     </h1>
+     <p>
+      Sistema de gestión de papelería
+     </p>
+    </div>
+    <div class="nav-title">
+     Menú principal
+    </div>
+    <nav class="nav-list">
+     <a href="../../index.html">
+      <span class="nav-icon">
+       ⌂
+      </span>
+      <span>
+       Inicio
+      </span>
+     </a>
+     <a href="../../modulos/usuarios/index.html">
+      <span class="nav-icon">
+       ♙
+      </span>
+      <span>
+       Usuarios
+      </span>
+     </a>
+     <a href="../../modulos/categorias/index.html">
+      <span class="nav-icon">
+       ▤
+      </span>
+      <span>
+       Categorías
+      </span>
+     </a>
+     <a href="../../modulos/inventario/index.html">
+      <span class="nav-icon">
+       ▥
+      </span>
+      <span>
+       Inventario
+      </span>
+     </a>
+     <a href="../../modulos/facturacion/index.html">
+      <span class="nav-icon">
+       ▤
+      </span>
+      <span>
+       Facturación
+      </span>
+     </a>
+     <a href="../../modulos/solicitudes/index.html">
+      <span class="nav-icon">
+       ▧
+      </span>
+      <span>
+       Solicitudes
+      </span>
+     </a>
+     <a href="../../modulos/estadisticas/index.html">
+      <span class="nav-icon">
+       ▨
+      </span>
+      <span>
+       Estadísticas
+      </span>
+     </a>
+     <a class="active" href="../../modulos/historial/index.html">
+      <span class="nav-icon">
+       ◷
+      </span>
+      <span>
+       Historial
+      </span>
+     </a>
+     <a href="../../modulos/configuracion/index.html">
+      <span class="nav-icon">
+       ⚙
+      </span>
+      <span>
+       Configuración
+      </span>
+     </a>
+    </nav>
+    <div class="sidebar-foot">
+     Panel administrativo
+     <br/>
+     Versión de proyecto
+    </div>
+   </aside>
+   <div class="main-area">
+    <!-- Encabezado: muestra el nombre de la sección -->
+    <header class="topbar">
+     <span class="crumb">
+      Kraft &amp; Co / Historial
+     </span>
+     <span class="user">
+      Administrador
+     </span>
+    </header>
+    <!-- Contenido principal de esta página -->
+    <main class="page-content">
+     <section class="intro">
+      <h2>
+       Historial de operaciones
+      </h2>
+      <p>
+       Registro de actividades administrativas. Administra y consulta la información de este módulo.
+      </p>
+     </section>
+     <section class="bloque">
+      <h2>
+       Registrar operación
+      </h2>
+      <div class="formulario">
+       <div class="campo">
+        <label for="usuario">
+         Usuario
+        </label>
+        <input id="usuario" placeholder="Usuario que realizó la operación"/>
+       </div>
+       <div class="campo">
+        <label for="operacion">
+         Descripción
+        </label>
+        <input id="operacion" placeholder="Descripción de la operación"/>
+       </div>
+       <div>
+        <button onclick="registrarOperacion()">
+         Registrar operación
+        </button>
+       </div>
+      </div>
+     </section>
+     <section class="bloque">
+      <h2>
+       Historial de actividades
+      </h2>
+      <div class="tabla-contenedor">
+       <table>
+        <thead>
+         <tr>
+          <th>
+           Usuario
+          </th>
+          <th>
+           Operación
+          </th>
+          <th>
+           Fecha
+          </th>
+         </tr>
+        </thead>
+        <tbody id="tablaHistorial">
+        </tbody>
+       </table>
+      </div>
+     </section>
+    </main>
+    <footer class="pie">
+     Kraft &amp; Co · Panel de administración
+    </footer>
+   </div>
+  </div>
+  <script src="funciones.js">
+  </script>
+ </body>
+</html>

@@ -1,3 +1,207 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Solicitudes de impresión | Kraft &amp; Co</title><link rel="stylesheet" href="../../css/estilos.css"></head>
-<body><div class="app-layout"><aside class="sidebar"><div class="brand"><h1>Kraft &amp; Co</h1><p>Sistema de gestión de papelería</p></div><div class="nav-title">Menú principal</div><nav class="nav-list"><a href="../../index.html"><span class="nav-icon">⌂</span><span>Inicio</span></a><a href="../../modulos/usuarios/index.html"><span class="nav-icon">♙</span><span>Usuarios</span></a><a href="../../modulos/productos/index.html"><span class="nav-icon">▣</span><span>Productos</span></a><a href="../../modulos/categorias/index.html"><span class="nav-icon">▤</span><span>Categorías</span></a><a href="../../modulos/inventario/index.html"><span class="nav-icon">▥</span><span>Inventario</span></a>
-    <a href="../../modulos/facturacion/index.html"><span class="nav-icon">▤</span><span>Facturación</span></a><a href="../../modulos/solicitudes/index.html" class="active"><span class="nav-icon">▧</span><span>Solicitudes</span></a><a href="../../modulos/estadisticas/index.html"><span class="nav-icon">▨</span><span>Estadísticas</span></a><a href="../../modulos/historial/index.html"><span class="nav-icon">◷</span><span>Historial</span></a><a href="../../modulos/configuracion/index.html"><span class="nav-icon">⚙</span><span>Configuración</span></a></nav><div class="sidebar-foot">Panel administrativo<br>Versión de proyecto</div></aside><div class="main-area"><header class="topbar"><span class="crumb">Kraft &amp; Co / Solicitudes</span><span class="user">Administrador</span></header><main class="page-content"><section class="intro"><h2>Solicitudes de impresión</h2><p>Administración de solicitudes de clientes. Administra y consulta la información de este módulo.</p></section><section class="bloque"><h2>Registrar solicitud</h2><div class="formulario"><div class="campo"><label for="cliente">Nombre del cliente</label><input id="cliente" placeholder="Nombre del cliente"></div><div class="campo"><label for="servicio">Servicio solicitado</label><input id="servicio" placeholder="Servicio solicitado"></div><div class="campo"><label for="estado">Estado</label><select id="estado"><option value="">Seleccionar estado</option><option>Pendiente</option><option>En proceso</option><option>Finalizada</option></select></div><div><button onclick="registrarSolicitud()">Registrar solicitud</button></div></div></section><section class="bloque"><h2>Solicitudes registradas</h2><div class="tabla-contenedor"><table><thead><tr><th>Cliente</th><th>Servicio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="tablaSolicitudes"></tbody></table></div></section></main><footer class="pie">Kraft &amp; Co · Panel de administración</footer></div></div><script src="funciones.js"></script></body></html>
+<!DOCTYPE html>
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Solicitudes de impresión | Kraft &amp; Co
+  </title>
+  <link href="../../css/estilos.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="app-layout">
+   <!-- Menú lateral: enlaces para cambiar de sección -->
+   <aside class="sidebar">
+    <div class="brand">
+     <h1>
+      Kraft &amp; Co
+     </h1>
+     <p>
+      Sistema de gestión de papelería
+     </p>
+    </div>
+    <div class="nav-title">
+     Menú principal
+    </div>
+    <nav class="nav-list">
+     <a href="../../index.html">
+      <span class="nav-icon">
+       ⌂
+      </span>
+      <span>
+       Inicio
+      </span>
+     </a>
+     <a href="../../modulos/usuarios/index.html">
+      <span class="nav-icon">
+       ♙
+      </span>
+      <span>
+       Usuarios
+      </span>
+     </a>
+     <a href="../../modulos/categorias/index.html">
+      <span class="nav-icon">
+       ▤
+      </span>
+      <span>
+       Categorías
+      </span>
+     </a>
+     <a href="../../modulos/inventario/index.html">
+      <span class="nav-icon">
+       ▥
+      </span>
+      <span>
+       Inventario
+      </span>
+     </a>
+     <a href="../../modulos/facturacion/index.html">
+      <span class="nav-icon">
+       ▤
+      </span>
+      <span>
+       Facturación
+      </span>
+     </a>
+     <a class="active" href="../../modulos/solicitudes/index.html">
+      <span class="nav-icon">
+       ▧
+      </span>
+      <span>
+       Solicitudes
+      </span>
+     </a>
+     <a href="../../modulos/estadisticas/index.html">
+      <span class="nav-icon">
+       ▨
+      </span>
+      <span>
+       Estadísticas
+      </span>
+     </a>
+     <a href="../../modulos/historial/index.html">
+      <span class="nav-icon">
+       ◷
+      </span>
+      <span>
+       Historial
+      </span>
+     </a>
+     <a href="../../modulos/configuracion/index.html">
+      <span class="nav-icon">
+       ⚙
+      </span>
+      <span>
+       Configuración
+      </span>
+     </a>
+    </nav>
+    <div class="sidebar-foot">
+     Panel administrativo
+     <br/>
+     Versión de proyecto
+    </div>
+   </aside>
+   <div class="main-area">
+    <!-- Encabezado: muestra el nombre de la sección -->
+    <header class="topbar">
+     <span class="crumb">
+      Kraft &amp; Co / Solicitudes
+     </span>
+     <span class="user">
+      Administrador
+     </span>
+    </header>
+    <!-- Contenido principal de esta página -->
+    <main class="page-content">
+     <section class="intro">
+      <h2>
+       Solicitudes de impresión
+      </h2>
+      <p>
+       Administración de solicitudes de clientes. Administra y consulta la información de este módulo.
+      </p>
+     </section>
+     <section class="bloque">
+      <h2>
+       Registrar solicitud
+      </h2>
+      <div class="formulario">
+       <div class="campo">
+        <label for="cliente">
+         Nombre del cliente
+        </label>
+        <input id="cliente" placeholder="Nombre del cliente"/>
+       </div>
+       <div class="campo">
+        <label for="servicio">
+         Servicio solicitado
+        </label>
+        <input id="servicio" placeholder="Servicio solicitado"/>
+       </div>
+       <div class="campo">
+        <label for="estado">
+         Estado
+        </label>
+        <select id="estado">
+         <option value="">
+          Seleccionar estado
+         </option>
+         <option>
+          Pendiente
+         </option>
+         <option>
+          En proceso
+         </option>
+         <option>
+          Finalizada
+         </option>
+        </select>
+       </div>
+       <div>
+        <button onclick="registrarSolicitud()">
+         Registrar solicitud
+        </button>
+       </div>
+      </div>
+     </section>
+     <section class="bloque">
+      <h2>
+       Solicitudes registradas
+      </h2>
+      <div class="tabla-contenedor">
+       <table>
+        <thead>
+         <tr>
+          <th>
+           Cliente
+          </th>
+          <th>
+           Servicio
+          </th>
+          <th>
+           Estado
+          </th>
+          <th>
+           Acciones
+          </th>
+         </tr>
+        </thead>
+        <tbody id="tablaSolicitudes">
+        </tbody>
+       </table>
+      </div>
+     </section>
+    </main>
+    <footer class="pie">
+     Kraft &amp; Co · Panel de administración
+    </footer>
+   </div>
+  </div>
+  <script src="funciones.js">
+  </script>
+ </body>
+</html>
